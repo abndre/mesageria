@@ -1,0 +1,38 @@
+version: '3'
+services:
+  rabbitmq1:
+    image: rabbitmq:3-management
+    container_name: rabbitmq1
+    hostname: rabbitmq1
+    ports:
+      - "8080:15672"
+      - "5672:5672"
+  mongo:
+    image: mongo
+    container_name: mongo
+    # environment:
+    #    MONGO_INITDB_ROOT_USERNAME: root
+    #    MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+    ports:
+        - "27017:27017"
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    ports:
+        - 8888:8081
+    environment:
+        ME_CONFIG_MONGODB_PORT: 27017
+    links:
+        - mongo
+  web:
+    container_name: flask
+    build: ./app
+    ports:
+        - "5000:5000"
+    volumes:
+        - .:/code
+    depends_on:
+        - redis
+  redis:
+    container_name: redis
+    image: redis
