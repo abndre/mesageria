@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import datetime
 
 # MONGO
-def mongo_insert(message):
+def mongo_insert(message=""):
 	cliente = MongoClient('mongo', 27017)
 
 	banco = cliente.test
@@ -19,7 +19,7 @@ def mongo_insert(message):
 	return colection.insert_one(payload).inserted_id
 
 def callback(ch, method, properties, body):
-    mongo_insert("nada")
+    #mongo_insert("nada")
     print(" [x] Received %r" % body)
 
 connection = pika.BlockingConnection(
