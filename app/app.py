@@ -12,7 +12,7 @@ def hello():
 
 @app.route('/pika')
 def pikasend():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq1'))
     channel = connection.channel()
 
     channel.queue_declare(queue='hello')

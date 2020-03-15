@@ -33,6 +33,8 @@ services:
         - .:/code
     depends_on:
         - redis
+    links:
+        - rabbitmq1
   redis:
     container_name: redis
     image: redis
