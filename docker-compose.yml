@@ -35,6 +35,8 @@ services:
         - redis
     links:
         - rabbitmq1
+    depends_on:
+        - rabbitmq1
   redis:
     container_name: redis
     image: redis
