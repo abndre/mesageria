@@ -38,3 +38,11 @@ services:
   redis:
     container_name: redis
     image: redis
+  receive:
+    container_name: receive
+    build: ./receive
+    links: 
+        - mongo
+        - rabbitmq1
+    depends_on:
+        - rabbitmq1
