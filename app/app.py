@@ -1,28 +1,26 @@
-from flask import Flask
-from redis import Redis
-import pika
+from flask import Flask, request
+from nameko.standalone.rpc import ClusterRpcProxy
+AMQP_URI = 'pyamqp://guest:guest@rabbitmq1'
 
 app = Flask(__name__)
-redis = Redis(host='redis', port=6379)
 
-@app.route('/')
-def hello():
-    redis.incr('hits')
-    return 'This Compose/Flask demo has been viewed {} time(s).'.format(redis.get('hits'))
+CONFIG = {
+    'AMQP_URI': AMQP_URI
+}
 
-@app.route('/pika')
-def pikasend():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq1'))
-    channel = connection.channel()
 
-    channel.queue_declare(queue='hello')
+@app.route('/mongo', methods=['POST'])
+def compute():
+    if request.method == 'POST':
+        message = request.json.get('message')
+        msg = "Please wait the calculation, you'll receive an email with results"
+        with ClusterRpcProxy(CONFIG) as rpc:
+            rpc.dict.save(message)
+            return msg, 200
+    elif request.method == 'GET':
+        return 'not exist', 201
 
-    channel.basic_publish(exchange='',
-                        routing_key='hello',
-                        body='Hello World!')
-    connection.close()
-
-    return 'pika'
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    # port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True,host='0.0.0.0',port=5000)

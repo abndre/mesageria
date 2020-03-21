@@ -10,9 +10,6 @@ services:
   mongo:
     image: mongo
     container_name: mongo
-    # environment:
-    #    MONGO_INITDB_ROOT_USERNAME: root
-    #    MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
     ports:
         - "27017:27017"
   mongo-express:
@@ -24,22 +21,22 @@ services:
         ME_CONFIG_MONGODB_PORT: 27017
     links:
         - mongo
-  web:
+  flask:
     container_name: flask
     build: ./app
     ports:
         - "5000:5000"
     volumes:
         - .:/code
-    depends_on:
-        - redis
+    # depends_on:
+    #     - redis
     links:
         - rabbitmq1
     depends_on:
         - rabbitmq1
-  redis:
-    container_name: redis
-    image: redis
+#   redis:
+#     container_name: redis
+#     image: redis
   receive:
     container_name: receive
     build: ./receive
