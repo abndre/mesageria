@@ -1,11 +1,10 @@
-import pika
 from pymongo import MongoClient
 
 import datetime
 
 # MONGO
 def mongo_insert(message):
-	cliente = MongoClient('localhost', 27017)
+	cliente = MongoClient('mongo', 27017)
 
 	banco = cliente.test
 
@@ -16,7 +15,7 @@ def mongo_insert(message):
 		"message": message
 		}
 
-	return colection.insert_one(payload).inserted_id
+	return colection.insert_one(payload)
 
 if __name__ == "__main__":
 	mongo_insert("Local")
