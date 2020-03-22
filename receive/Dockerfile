@@ -7,4 +7,4 @@ RUN \
   apt-get install -y python python-pip python-dev
 RUN pip install -r requirements.txt
 #ENTRYPOINT ["python"]
-CMD ["nameko", "run", "main"]
+CMD ["nameko", "run", "--config" ,"foobar.yaml", "main"]
