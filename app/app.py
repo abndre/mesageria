@@ -13,13 +13,23 @@ CONFIG = {
 def compute():
     if request.method == 'POST':
         message = request.json.get('message')
-        msg = "Please wait the calculation, you'll receive an email with results"
+        msg = "demora 10 segundos"
         with ClusterRpcProxy(CONFIG) as rpc:
             rpc.dict.save(message)
             return msg, 200
     elif request.method == 'GET':
         return 'not exist', 201
 
+@app.route('/mongo1', methods=['POST'])
+def compute1():
+    if request.method == 'POST':
+        message = request.json.get('message')
+        msg = "async"
+        with ClusterRpcProxy(CONFIG) as rpc:
+            rpc.dict.save.call_async(message)
+            return msg, 200
+    elif request.method == 'GET':
+        return 'not exist', 201
 
 if __name__ == "__main__":
     # port = int(os.environ.get("PORT", 5000))
